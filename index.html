@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID-19 Information & Awareness Portal | STQA Mini Project</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/virus.svg">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-announcement" id="top-announcement">
+    <div class="container announcement-inner">
+      <div class="announcement-text">
+        <span class="badge badge-pulse">LIVE HELPLINE</span>
+        <span>National COVID-19 Helpline: <strong>1075</strong> (Toll Free) | Health Ministry: <strong>+91-11-23978046</strong></span>
+      </div>
+      <div class="academic-badge">
+        <span>BE COMP SEM 7 | STQA Experiment 14</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand-logo" id="brand-logo">
+        <div class="logo-icon-wrap">
+          <img src="assets/icons/shield.svg" alt="Portal Logo" class="brand-icon">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">COVID-19 <span>Portal</span></span>
+          <span class="brand-sub">Information & Testing Management</span>
+        </div>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav">
+        <ul class="nav-list">
+          <li><a href="#home" class="nav-link active" id="nav-home">Home</a></li>
+          <li><a href="#info" class="nav-link" id="nav-info">Overview</a></li>
+          <li><a href="#symptoms" class="nav-link" id="nav-symptoms">Symptoms</a></li>
+          <li><a href="#prevention" class="nav-link" id="nav-prevention">Prevention</a></li>
+          <li><a href="#vaccination" class="nav-link" id="nav-vaccine">Vaccination</a></li>
+          <li><a href="#test-registration" class="nav-link highlight-link" id="nav-test-reg">Book Test</a></li>
+          <li><a href="#report-search" class="nav-link" id="nav-report-search">Search Report</a></li>
+          <li><a href="#dashboard" class="nav-link" id="nav-dashboard">Dashboard</a></li>
+          <li><a href="#comments" class="nav-link" id="nav-comments">Community</a></li>
+        </ul>
+
+        <div class="nav-auth-actions" id="nav-auth-actions">
+          <!-- Logged out state -->
+          <div class="logged-out-actions" id="logged-out-actions">
+            <button class="btn btn-outline-sm" id="nav-login" onclick="openModal('login-modal')">Login</button>
+            <button class="btn btn-primary-sm" id="nav-register" onclick="openModal('register-modal')">Register</button>
+          </div>
+          <!-- Logged in state -->
+          <div class="logged-in-actions hidden" id="logged-in-actions">
+            <span class="user-greeting" id="user-display-name">Welcome, User</span>
+            <button class="btn btn-danger-sm" id="logout-button">Logout</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="home">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <img src="assets/icons/virus.svg" alt="Virus" class="inline-icon">
+          <span>Public Health & Testing Information Center</span>
+        </div>
+        <h1 class="hero-heading">Together We Can Overcome COVID-19</h1>
+        <p class="hero-desc">
+          Stay informed with scientifically verified COVID-19 health data, symptoms self-assessment, preventive guidelines, nationwide vaccination updates, and an integrated diagnostic testing registration portal.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#test-registration" class="btn btn-primary" id="hero-btn-book-test">
+            <img src="assets/icons/check.svg" alt="" class="btn-icon"> Book COVID-19 Test
+          </a>
+          <a href="#report-search" class="btn btn-outline" id="hero-btn-check-report">
+            <img src="assets/icons/search.svg" alt="" class="btn-icon"> Track Test Report
+          </a>
+          <a href="#symptoms" class="btn btn-secondary" id="hero-btn-symptoms">Check Symptoms</a>
+        </div>
+        <div class="hero-metrics-strip">
+          <div class="metric-item">
+            <strong id="hero-stat-tests">54,000+</strong>
+            <span>Verified Tests</span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric-item">
+            <strong id="hero-stat-recovery">98.8%</strong>
+            <span>Recovery Rate</span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric-item">
+            <strong id="hero-stat-vaccines">2.2B+</strong>
+            <span>Doses Administered</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="hero-illustration-card">
+          <img src="assets/images/hero-illustration.svg" alt="COVID-19 Awareness and Healthcare Shield" class="hero-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Search Section across Portal -->
+  <section class="search-section" id="site-search-section">
+    <div class="container">
+      <div class="search-card">
+        <div class="search-header">
+          <h2 class="search-title">Instant Health & Guidelines Search</h2>
+          <p class="search-subtitle">Search for symptoms, safety measures, vaccine eligibility, quarantine protocols, or medical emergency advice.</p>
+        </div>
+        <div class="search-form-wrap">
+          <div class="search-input-group">
+            <img src="assets/icons/search.svg" alt="Search" class="search-bar-icon">
+            <input type="text" id="search-input" placeholder="e.g. fever, RT-PCR, booster dose, mask, helpline, quarantine..." autocomplete="off">
+            <button class="btn btn-clear hidden" id="search-clear" title="Clear search">✕</button>
+            <button class="btn btn-primary" id="search-button">Search Portal</button>
+          </div>
+          <div class="search-quick-tags">
+            <span>Trending:</span>
+            <button class="quick-tag" onclick="quickSearch('symptoms')">Symptoms</button>
+            <button class="quick-tag" onclick="quickSearch('RT-PCR')">RT-PCR Test</button>
+            <button class="quick-tag" onclick="quickSearch('mask')">Face Masks</button>
+            <button class="quick-tag" onclick="quickSearch('booster')">Booster Vaccine</button>
+            <button class="quick-tag" onclick="quickSearch('helpline')">Emergency Numbers</button>
+          </div>
+        </div>
+        <div class="search-results-container hidden" id="search-results">
+          <!-- Dynamic results rendered by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Statistics Cards -->
+  <section class="stats-section" id="stats">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">Surveillance & Analytics</span>
+        <h2 class="section-heading">COVID-19 National Data Overview</h2>
+        <p class="section-subheading">Continuously monitored epidemiological metrics and clinical milestone counters.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card stat-confirmed">
+          <div class="stat-icon-wrap bg-primary-soft">
+            <img src="assets/icons/virus.svg" alt="Confirmed">
+          </div>
+          <div class="stat-data">
+            <span class="stat-label">Total Confirmed Cases</span>
+            <h3 class="stat-number" id="stat-confirmed">44,998,520</h3>
+            <span class="stat-trend trend-neutral">Surveillance active across 36 states</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-recovered">
+          <div class="stat-icon-wrap bg-success-soft">
+            <img src="assets/icons/check.svg" alt="Recovered">
+          </div>
+          <div class="stat-data">
+            <span class="stat-label">Total Recovered</span>
+            <h3 class="stat-number" id="stat-recovered">44,465,110</h3>
+            <span class="stat-trend trend-positive">↑ 98.81% Recovery Rate</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-active">
+          <div class="stat-icon-wrap bg-warning-soft">
+            <img src="assets/icons/alert.svg" alt="Active">
+          </div>
+          <div class="stat-data">
+            <span class="stat-label">Active Monitored Cases</span>
+            <h3 class="stat-number" id="stat-active">1,432</h3>
+            <span class="stat-trend trend-positive">↓ Hospitalization rate < 0.05%</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-vaccines">
+          <div class="stat-icon-wrap bg-info-soft">
+            <img src="assets/icons/vaccine.svg" alt="Vaccines">
+          </div>
+          <div class="stat-data">
+            <span class="stat-label">Vaccination Doses</span>
+            <h3 class="stat-number" id="stat-doses">2,206,750,000+</h3>
+            <span class="stat-trend trend-positive">Full Coverage in adults > 90%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COVID-19 Information & Overview -->
+  <section class="info-section section-padding" id="info">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">Medical Information</span>
+        <h2 class="section-heading">Understanding COVID-19 (SARS-CoV-2)</h2>
+        <p class="section-subheading">A comprehensive medical overview of etiology, pathogenesis, and transmission biology.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="icon-bubble">
+              <img src="assets/icons/virus.svg" alt="">
+            </div>
+            <h3>What is Coronavirus?</h3>
+          </div>
+          <p>
+            Coronavirus disease (COVID-19) is an infectious respiratory illness caused by the novel coronavirus SARS-CoV-2 (Severe Acute Respiratory Syndrome Coronavirus 2). First identified in late 2019, it attacks respiratory epithelium and can cause systemic symptoms.
+          </p>
+          <ul class="check-list">
+            <li>Belongs to Coronaviridae family of single-stranded RNA viruses</li>
+            <li>Enters host cells via ACE-2 receptors in alveolar tissues</li>
+            <li>Can cause mild upper respiratory symptoms or acute viral pneumonia</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="icon-bubble">
+              <img src="assets/icons/distance.svg" alt="">
+            </div>
+            <h3>How Does It Spread?</h3>
+          </div>
+          <p>
+            The virus spreads mainly between people who are in close physical contact with each other, primarily through respiratory droplets expelled when an infected person breathes, speaks, coughs, sneezes, or sings.
+          </p>
+          <ul class="check-list">
+            <li><strong>Respiratory Droplets:</strong> Heavy droplets landing directly on mucosal surfaces</li>
+            <li><strong>Aerosol Particles:</strong> Microscopic droplets lingering in poorly ventilated spaces</li>
+            <li><strong>Fomite Transmission:</strong> Touching contaminated surfaces followed by mouth, eyes, or nose</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="icon-bubble">
+              <img src="assets/icons/shield.svg" alt="">
+            </div>
+            <h3>Incubation & Clinical Course</h3>
+          </div>
+          <p>
+            The incubation period typically ranges from 2 to 14 days following exposure, with most infected individuals developing symptoms between day 4 and day 7. Asymptomatic carriers can also transmit the virus.
+          </p>
+          <ul class="check-list">
+            <li>Early Phase (Days 1–5): Upper respiratory symptoms, fever, malaise</li>
+            <li>Pulmonary Phase (Days 5–10): Persistent cough, potential dyspnea</li>
+            <li>Convalescence (Days 10–14): Resolution of viral replication and recovery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Symptoms Section with Interactive Checker -->
+  <section class="symptoms-section section-padding bg-light" id="symptoms">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">Clinical Manifestations</span>
+        <h2 class="section-heading">COVID-19 Symptoms & Self-Check</h2>
+        <p class="section-subheading">Identify mild, moderate, and critical clinical indicators according to WHO classifications.</p>
+      </div>
+
+      <div class="symptoms-columns-grid">
+        <!-- Most Common -->
+        <div class="symptom-column-card">
+          <div class="column-card-header common-header">
+            <span class="severity-tag tag-common">Most Common</span>
+            <h3>Initial Symptoms</h3>
+          </div>
+          <ul class="symptom-list">
+            <li>
+              <div class="symptom-bullet bg-blue"></div>
+              <div>
+                <strong>High Fever or Chills</strong>
+                <p>Body temperature exceeding 38°C (100.4°F)</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-blue"></div>
+              <div>
+                <strong>Persistent Dry Cough</strong>
+                <p>Continuous coughing fit lasting over an hour</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-blue"></div>
+              <div>
+                <strong>Fatigue & Weakness</strong>
+                <p>Unusual physical exhaustion and lethargy</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-blue"></div>
+              <div>
+                <strong>Anosmia / Ageusia</strong>
+                <p>Sudden loss of sense of smell or taste</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Less Common -->
+        <div class="symptom-column-card">
+          <div class="column-card-header moderate-header">
+            <span class="severity-tag tag-moderate">Less Common</span>
+            <h3>Secondary Signs</h3>
+          </div>
+          <ul class="symptom-list">
+            <li>
+              <div class="symptom-bullet bg-amber"></div>
+              <div>
+                <strong>Sore Throat</strong>
+                <p>Irritation and pain when swallowing</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-amber"></div>
+              <div>
+                <strong>Severe Headache</strong>
+                <p>Frontal or generalized persistent headache</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-amber"></div>
+              <div>
+                <strong>Generalized Muscle Aches</strong>
+                <p>Myalgia affecting back and limbs</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-amber"></div>
+              <div>
+                <strong>Gastrointestinal Distress</strong>
+                <p>Diarrhea, nausea, or abdominal cramping</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Serious / Emergency -->
+        <div class="symptom-column-card danger-card">
+          <div class="column-card-header danger-header">
+            <span class="severity-tag tag-danger">EMERGENCY</span>
+            <h3>Critical Red Flags</h3>
+          </div>
+          <ul class="symptom-list">
+            <li>
+              <div class="symptom-bullet bg-red"></div>
+              <div>
+                <strong>Dyspnea (Shortness of Breath)</strong>
+                <p>Difficulty breathing even while resting</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-red"></div>
+              <div>
+                <strong>Persistent Chest Pressure</strong>
+                <p>Continuous pain or tightness across chest</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-red"></div>
+              <div>
+                <strong>Hypoxia (SpO2 &lt; 94%)</strong>
+                <p>Drop in blood oxygen saturation levels</p>
+              </div>
+            </li>
+            <li>
+              <div class="symptom-bullet bg-red"></div>
+              <div>
+                <strong>Confusion & Cyanosis</strong>
+                <p>Bluish lips, pale nail beds, mental disorientation</p>
+              </div>
+            </li>
+          </ul>
+          <div class="emergency-alert-box">
+            <img src="assets/icons/alert.svg" alt="Alert" class="alert-icon">
+            <p><strong>Seek Emergency Care:</strong> If you or anyone experiences critical symptoms, dial <strong>108</strong> or <strong>1075</strong> immediately.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Self-Assessment Module -->
+      <div class="symptom-checker-card" id="symptom-checker">
+        <div class="checker-header">
+          <h3>Interactive Symptom Risk Self-Assessment</h3>
+          <p>Check any symptoms you have been experiencing over the last 48 hours to get immediate health guidance.</p>
+        </div>
+        <div class="checker-options-grid">
+          <label class="check-label"><input type="checkbox" id="chk-fever" value="fever"> Fever / Chills</label>
+          <label class="check-label"><input type="checkbox" id="chk-cough" value="cough"> Dry Cough</label>
+          <label class="check-label"><input type="checkbox" id="chk-fatigue" value="fatigue"> Fatigue</label>
+          <label class="check-label"><input type="checkbox" id="chk-smell" value="smell"> Loss of Taste / Smell</label>
+          <label class="check-label"><input type="checkbox" id="chk-throat" value="throat"> Sore Throat</label>
+          <label class="check-label"><input type="checkbox" id="chk-breath" value="breath"> Difficulty Breathing</label>
+          <label class="check-label"><input type="checkbox" id="chk-chest" value="chest"> Persistent Chest Pain</label>
+        </div>
+        <div class="checker-actions">
+          <button class="btn btn-primary" id="btn-assess-symptoms" onclick="evaluateSymptoms()">Evaluate Risk</button>
+          <button class="btn btn-outline" id="btn-reset-symptoms" onclick="resetSymptomChecker()">Reset</button>
+        </div>
+        <div class="checker-result hidden" id="checker-result-box"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prevention & Safety Guidelines -->
+  <section class="prevention-section section-padding" id="prevention">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">Protection & Safety</span>
+        <h2 class="section-heading">Evidence-Based Prevention Protocols</h2>
+        <p class="section-subheading">Practical, scientifically proven steps to protect yourself, your family, and your workplace.</p>
+      </div>
+
+      <div class="prevention-grid">
+        <div class="prevention-card">
+          <div class="prevention-icon">
+            <img src="assets/icons/mask.svg" alt="Wear Mask">
+          </div>
+          <h4>Wear Certified Masks</h4>
+          <p>Wear well-fitted multi-layer masks or N95 respirators in enclosed indoor environments, crowded public transit, and medical settings.</p>
+        </div>
+
+        <div class="prevention-card">
+          <div class="prevention-icon">
+            <img src="assets/icons/handwash.svg" alt="Wash Hands">
+          </div>
+          <h4>Frequent Hand Hygiene</h4>
+          <p>Clean your hands thoroughly with soap and water for at least 20 seconds, or sanitize using alcohol-based rub (&gt;70% alcohol).</p>
+        </div>
+
+        <div class="prevention-card">
+          <div class="prevention-icon">
+            <img src="assets/icons/distance.svg" alt="Physical Distance">
+          </div>
+          <h4>Physical Distancing</h4>
+          <p>Maintain at least 6 feet (2 meters) distance from individuals who are coughing, sneezing, or displaying flu-like symptoms.</p>
+        </div>
+
+        <div class="prevention-card">
+          <div class="prevention-icon">
+            <img src="assets/icons/shield.svg" alt="Ventilation">
+          </div>
+          <h4>Improve Ventilation</h4>
+          <p>Open windows and doors to enhance fresh airflow indoors. Prefer outdoor or well-ventilated gatherings over sealed rooms.</p>
+        </div>
+
+        <div class="prevention-card">
+          <div class="prevention-icon">
+            <img src="assets/icons/virus.svg" alt="Disinfection">
+          </div>
+          <h4>Disinfect High-Touch Surfaces</h4>
+          <p>Routinely sanitize doorknobs, switches, mobile phone surfaces, laptops, and shared study or workstation desks.</p>
+        </div>
+
+        <div class="prevention-card">
+          <div class="prevention-icon">
+            <img src="assets/icons/check.svg" alt="Vaccination">
+          </div>
+          <h4>Complete Vaccination</h4>
+          <p>Get vaccinated with primary doses and precautionary booster shots according to local health authority guidelines.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vaccination Module & Myth Busters -->
+  <section class="vaccine-section section-padding bg-light" id="vaccination">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">Immunization Drive</span>
+        <h2 class="section-heading">COVID-19 Vaccination Guide</h2>
+        <p class="section-subheading">Approved vaccine formulations, dosing schedules, and debunking common misconceptions.</p>
+      </div>
+
+      <div class="vaccine-grid">
+        <div class="vaccine-card">
+          <div class="vaccine-badge">Recombinant Vector</div>
+          <h3>Covishield (AstraZeneca)</h3>
+          <p>Recombinant, replication-deficient chimpanzee adenovirus vector encoding the SARS-CoV-2 Spike glycoprotein.</p>
+          <div class="vaccine-schedule">
+            <span><strong>Doses:</strong> 2 doses</span>
+            <span><strong>Gap:</strong> 84 days</span>
+            <span><strong>Efficacy:</strong> ~81% against hospitalization</span>
+          </div>
+        </div>
+
+        <div class="vaccine-card">
+          <div class="vaccine-badge">Inactivated Whole Virion</div>
+          <h3>Covaxin (BBV152)</h3>
+          <p>Whole-virion inactivated Vero cell technology providing broad multi-antigen immunity against variant spike mutations.</p>
+          <div class="vaccine-schedule">
+            <span><strong>Doses:</strong> 2 doses</span>
+            <span><strong>Gap:</strong> 28 days</span>
+            <span><strong>Efficacy:</strong> ~78% against symptomatic COVID</span>
+          </div>
+        </div>
+
+        <div class="vaccine-card">
+          <div class="vaccine-badge">Protein Subunit</div>
+          <h3>Corbevax (Recombinant)</h3>
+          <p>Recombinant protein subunit vaccine containing the Receptor Binding Domain (RBD) formulated with adjuvant.</p>
+          <div class="vaccine-schedule">
+            <span><strong>Doses:</strong> 2 doses + Booster</span>
+            <span><strong>Gap:</strong> 28 days</span>
+            <span><strong>Target:</strong> Approved for ages 12+ and booster</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Myth vs Fact Accordion -->
+      <div class="myth-fact-box">
+        <h3 class="myth-heading">Vaccine Myths vs. Scientific Facts</h3>
+        <div class="myth-items">
+          <div class="myth-item">
+            <div class="myth-header">
+              <span class="label-myth">MYTH</span>
+              <strong>"The COVID-19 vaccine alters human genetic DNA."</strong>
+            </div>
+            <div class="myth-fact">
+              <span class="label-fact">FACT</span>
+              <p>COVID-19 vaccines do not enter the nucleus of human cells where DNA is housed. They deliver instructions to trigger antibodies and degrade naturally within hours.</p>
+            </div>
+          </div>
+
+          <div class="myth-item">
+            <div class="myth-header">
+              <span class="label-myth">MYTH</span>
+              <strong>"If I already had COVID-19, I do not need the vaccine."</strong>
+            </div>
+            <div class="myth-fact">
+              <span class="label-fact">FACT</span>
+              <p>Natural immunity diminishes over time. Hybrid immunity (combining prior infection with vaccination) provides significantly stronger protection against reinfection and hospitalization.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 03: COVID-19 Test Registration (new-user-testing) -->
+  <section class="test-reg-section section-padding" id="test-registration">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">MOD-03: Diagnostic Testing</span>
+        <h2 class="section-heading">COVID-19 Diagnostic Test Registration</h2>
+        <p class="section-subheading">Book an appointment for RT-PCR, Rapid Antigen, or Antibody testing with regular-expression verified form validation.</p>
+      </div>
+
+      <div class="test-reg-container">
+        <div class="form-header-bar">
+          <h3>COVID-19 Testing Application Form</h3>
+          <span class="form-badge">Automated Regex Validation (REQ-01 to REQ-11)</span>
+        </div>
+
+        <form id="covid-test-form" onsubmit="handleTestRegistration(event)" novalidate>
+          <div class="form-section-group">
+            <h4 class="form-subheading">1. Personal Information</h4>
+            <div class="form-row">
+              <div class="form-col">
+                <label for="patient-name">Full Name <span class="required">*</span></label>
+                <input type="text" id="patient-name" name="patient-name" placeholder="Enter full patient name (e.g. Anita Sharma)" required>
+                <small class="field-hint">Minimum 2 letters, alphabets only.</small>
+              </div>
+              <div class="form-col">
+                <label for="patient-phone">Mobile Number <span class="required">*</span></label>
+                <input type="tel" id="patient-phone" name="patient-phone" placeholder="10-digit mobile (e.g. 9876543210)" maxlength="10" required>
+                <small class="field-hint">Must start with 6, 7, 8, or 9 and be exactly 10 digits.</small>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label for="patient-dob">Date of Birth (DOB) <span class="required">*</span></label>
+                <input type="date" id="patient-dob" name="patient-dob" required>
+                <small class="field-hint">Format YYYY-MM-DD. Cannot be a future date.</small>
+              </div>
+              <div class="form-col">
+                <label for="govt-id-type">Government Issued ID Type <span class="required">*</span></label>
+                <select id="govt-id-type" name="govt-id-type" onchange="updateGovtIdPlaceholder()" required>
+                  <option value="">Select ID Type</option>
+                  <option value="Aadhaar">Aadhaar Card (12 digits)</option>
+                  <option value="PAN">PAN Card (5 letters, 4 digits, 1 letter)</option>
+                  <option value="VoterID">Voter ID (3 letters, 7 digits)</option>
+                </select>
+                <small class="field-hint">Choose identification document for verification.</small>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label for="govt-id-num">Govt Issued ID Number <span class="required">*</span></label>
+                <input type="text" id="govt-id-num" name="govt-id-num" placeholder="Enter ID number according to chosen type" required>
+                <small class="field-hint" id="govt-id-hint">Aadhaar (12 digits), PAN (e.g. ABCDE1234F), Voter ID (e.g. ABC1234567).</small>
+              </div>
+              <div class="form-col">
+                <label for="patient-state">State / UT <span class="required">*</span></label>
+                <select id="patient-state" name="patient-state" required>
+                  <option value="">Select State</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="West Bengal">West Bengal</option>
+                </select>
+                <small class="field-hint">Mapped directly into the State-wise Dashboard.</small>
+              </div>
+            </div>
+
+            <div class="form-row full-width">
+              <div class="form-col">
+                <label for="patient-address">Residential Address <span class="required">*</span></label>
+                <textarea id="patient-address" name="patient-address" rows="2" placeholder="Enter complete residential address" required></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section-group">
+            <h4 class="form-subheading">2. Testing Information</h4>
+            <div class="form-row">
+              <div class="form-col">
+                <label for="test-type">Test Type <span class="required">*</span></label>
+                <select id="test-type" name="test-type" required>
+                  <option value="">Select Diagnostic Test</option>
+                  <option value="RT-PCR">RT-PCR (Reverse Transcription Polymerase Chain Reaction - Gold Standard)</option>
+                  <option value="Rapid Antigen">Rapid Antigen Test (RAT - 30 Minute Result)</option>
+                  <option value="Antibody Test">Antibody Test (IgG / IgM Serology)</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label for="patient-slot">Time Slot for Test Appointment <span class="required">*</span></label>
+                <input type="datetime-local" id="patient-slot" name="patient-slot" required>
+                <small class="field-hint">Must be scheduled on or after tomorrow (future slot date-time).</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg" id="test-reg-submit">Submit Test Registration</button>
+            <button type="reset" class="btn btn-outline" id="test-reg-reset" onclick="clearTestRegMsg()">Reset Form</button>
+          </div>
+
+          <div class="alert-box hidden" id="test-reg-msg"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 04: Search & Test Report (patient-search-report) -->
+  <section class="report-search-section section-padding bg-light" id="report-search">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">MOD-04: Diagnostics Retrieval</span>
+        <h2 class="section-heading">Search & Download Patient Test Report</h2>
+        <p class="section-subheading">Retrieve laboratory test status and verified PDF medical certificates using registered phone number, order ID, or name.</p>
+      </div>
+
+      <div class="report-search-box">
+        <div class="report-search-inputs">
+          <div class="search-field-wrap">
+            <img src="assets/icons/search.svg" alt="" class="field-icon">
+            <input type="text" id="report-search-input" placeholder="Search by Patient Name, 10-digit Mobile (e.g. 9876543210), or Order ID (e.g. ORD-1001)...">
+          </div>
+          <button class="btn btn-primary" id="report-search-btn" onclick="handleReportSearch()">Search Report</button>
+        </div>
+        <small class="search-helper-text">Try registered sample phone: <strong>9876543210</strong> or order: <strong>ORD-1001</strong></small>
+      </div>
+
+      <!-- Report Display Card Area -->
+      <div class="report-display-area" id="report-display-area">
+        <div class="report-empty-placeholder" id="report-empty-placeholder">
+          <img src="assets/icons/shield.svg" alt="" class="placeholder-icon">
+          <h4>No Report Selected</h4>
+          <p>Enter a registered patient mobile number or test order ID above to preview and download the verified diagnostic report.</p>
+        </div>
+
+        <div class="report-card hidden" id="report-result-card">
+          <div class="report-card-header">
+            <div class="report-branding">
+              <h3>COVID-19 DIAGNOSTIC LABORATORY REPORT</h3>
+              <p>NABL Accredited Testing Facility | ICMR Registration ID: 2026-COV-9981</p>
+            </div>
+            <div class="report-meta">
+              <span class="report-badge-status" id="report-badge-status">NEGATIVE</span>
+              <span class="report-order-no" id="report-order-no">Order #ORD-1001</span>
+            </div>
+          </div>
+
+          <div class="report-divider"></div>
+
+          <div class="report-details-grid">
+            <div class="report-detail-item">
+              <span class="detail-label">Patient Full Name:</span>
+              <strong class="detail-val" id="report-patient-name">Anita Sharma</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Mobile Number:</span>
+              <strong class="detail-val" id="report-patient-phone">9876543210</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Date of Birth / Age:</span>
+              <strong class="detail-val" id="report-patient-dob">1998-04-17 (28 Yrs)</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Government ID:</span>
+              <strong class="detail-val" id="report-patient-govtid">PAN: ABCDE1234F</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Test Methodology:</span>
+              <strong class="detail-val" id="report-test-type">RT-PCR (Dual Target SARS-CoV-2)</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Sample Slot & Time:</span>
+              <strong class="detail-val" id="report-slot-time">2026-11-02 10:30 AM</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Sample State:</span>
+              <strong class="detail-val" id="report-patient-state">Maharashtra</strong>
+            </div>
+            <div class="report-detail-item">
+              <span class="detail-label">Result Finding:</span>
+              <strong class="detail-val text-success" id="report-clinical-result">SARS-CoV-2 RNA Not Detected (Negative)</strong>
+            </div>
+          </div>
+
+          <div class="report-card-footer">
+            <div class="report-disclaimer">
+              <small>Verified digital certificate for college academic submission and Selenium test automation verification.</small>
+            </div>
+            <div class="report-actions">
+              <button class="btn btn-outline" id="print-report-btn" onclick="window.print()">Print Report</button>
+              <button class="btn btn-primary" id="download-report-btn" onclick="downloadReportMock()">Download Report (.PDF)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-box alert-warning hidden" id="report-not-found-msg">
+          <strong>No Patient Report Found:</strong> No test record matched your query. Please verify the mobile number or order ID.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 05: State-Wise Testing Dashboard -->
+  <section class="dashboard-section section-padding" id="dashboard">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">MOD-05: Real-Time Intelligence</span>
+        <h2 class="section-heading">State-Wise COVID-19 Testing Dashboard</h2>
+        <p class="section-subheading">Synchronized aggregate statistics across Indian states and union territories (REQ-13 verification).</p>
+      </div>
+
+      <div class="dashboard-wrapper">
+        <div class="dashboard-toolbar">
+          <div class="toolbar-stats">
+            <span>Registered States: <strong>8</strong></span>
+            <span>Live Data Sync: <span class="sync-status">Active (LocalStorage DB)</span></span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-outline-sm" id="btn-refresh-dashboard" onclick="renderStateDashboard()">
+              Refresh Statistics
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="state-dashboard-table" id="state-dashboard-table">
+            <thead>
+              <tr>
+                <th>Sr.No.</th>
+                <th>State Name</th>
+                <th>Total Tests Done</th>
+                <th>Positive Cases</th>
+                <th>Recovered</th>
+                <th>Active Rate</th>
+              </tr>
+            </thead>
+            <tbody id="state-dashboard-body">
+              <!-- Dynamically populated from script.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 06: Community Comments & Discussion -->
+  <section class="comments-section section-padding bg-light" id="comments">
+    <div class="container">
+      <div class="section-title-wrap text-center">
+        <span class="section-badge">MOD-06: Feedback & Support</span>
+        <h2 class="section-heading">Community Discussion & Experiences</h2>
+        <p class="section-subheading">Share vaccination updates, safety inquiries, and community feedback. Postings are restricted to authenticated members.</p>
+      </div>
+
+      <div class="comments-container">
+        <!-- New Comment Form Area -->
+        <div class="comment-form-card">
+          <div id="comment-auth-lock" class="comment-lock-banner">
+            <img src="assets/icons/user.svg" alt="Auth Required" class="lock-icon">
+            <div>
+              <h4>Authentication Required</h4>
+              <p>You must be logged in to post comments or inquiries. <a href="javascript:void(0)" onclick="openModal('login-modal')">Log In here</a> or <a href="javascript:void(0)" onclick="openModal('register-modal')">Register an account</a>.</p>
+            </div>
+          </div>
+
+          <form id="comment-post-form" class="hidden" onsubmit="handleCommentSubmit(event)">
+            <div class="comment-user-badge">
+              <span class="badge badge-primary">Posting as:</span>
+              <strong id="comment-author-name">Current User</strong>
+            </div>
+            <div class="form-group">
+              <label for="comment-input" class="sr-only">Your Comment</label>
+              <textarea id="comment-input" placeholder="Write your experience, ask a question, or leave feedback (HTML tags will be escaped)..." rows="3" required></textarea>
+            </div>
+            <div class="comment-form-actions">
+              <button type="submit" class="btn btn-primary" id="comment-submit">Post Comment</button>
+            </div>
+            <div class="alert-box hidden" id="comment-msg"></div>
+          </form>
+        </div>
+
+        <!-- Comments Feed -->
+        <div class="comments-feed">
+          <div class="feed-header">
+            <h3>Community Posts (<span id="comments-count">0</span>)</h3>
+          </div>
+          <div class="comments-list" id="comments-list">
+            <!-- Dynamic comments rendered by script.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col brand-col">
+        <div class="footer-logo">
+          <img src="assets/icons/shield.svg" alt="Logo" class="footer-icon">
+          <span>COVID-19 Awareness Portal</span>
+        </div>
+        <p class="footer-text">
+          Developed for BE Computer Engineering Semester 7 - Software Testing & Quality Assurance (STQA) Mini-Project (Experiment 14).
+        </p>
+        <div class="footer-eval-info">
+          <p><strong>Evaluator:</strong> Bhushan Gholap Sir</p>
+          <p><strong>Team Members:</strong> Payal Sahare (115), Lavanya Pillai (105), Gauri Rajput (110)</p>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Quick Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="#home">Home Portal</a></li>
+          <li><a href="#info">COVID-19 Overview</a></li>
+          <li><a href="#symptoms">Symptoms & Self Check</a></li>
+          <li><a href="#prevention">Prevention Guidelines</a></li>
+          <li><a href="#vaccination">Vaccination Drive</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Diagnostic Services</h4>
+        <ul class="footer-links">
+          <li><a href="#test-registration">Book COVID-19 Test</a></li>
+          <li><a href="#report-search">Download Patient Report</a></li>
+          <li><a href="#dashboard">State-wise Testing Stats</a></li>
+          <li><a href="#comments">Community Q&A Forum</a></li>
+          <li><a href="javascript:void(0)" onclick="openModal('admin-modal')">Admin Login Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Emergency Helplines</h4>
+        <div class="helpline-list">
+          <p><strong>National Toll-Free:</strong> 1075</p>
+          <p><strong>Health Ministry:</strong> +91-11-23978046</p>
+          <p><strong>Child Helpline:</strong> 1098</p>
+          <p><strong>Mental Health Support:</strong> 08046110007</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 COVID-19 Information & Awareness Portal. Academic Mini-Project Demonstration (LocalStorage Auth).</p>
+        <p>Built with Pure HTML5, CSS3, & Vanilla JavaScript. Zero external frameworks.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal 1: User Login Modal -->
+  <div class="modal-overlay hidden" id="login-modal" onclick="closeModalOnBackdrop(event, 'login-modal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>User Login</h3>
+        <button class="modal-close" onclick="closeModal('login-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub">Login with your registered email and password to post comments and access profile features.</p>
+        <form id="user-login-form" onsubmit="handleUserLogin(event)" novalidate>
+          <div class="form-group">
+            <label for="login-email">Registered Email Address <span class="required">*</span></label>
+            <input type="email" id="login-email" placeholder="name@example.com" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password <span class="required">*</span></label>
+            <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+          </div>
+          <div class="alert-box hidden" id="login-msg"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="login-submit">Login to Account</button>
+        </form>
+        <div class="modal-footer-text">
+          <span>Don't have an account yet? </span>
+          <a href="javascript:void(0)" onclick="switchModal('login-modal', 'register-modal')">Register here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: User Registration Modal -->
+  <div class="modal-overlay hidden" id="register-modal" onclick="closeModalOnBackdrop(event, 'register-modal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create New Account</h3>
+        <button class="modal-close" onclick="closeModal('register-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub">Register with valid email format and secure password to engage with the portal.</p>
+        <form id="user-register-form" onsubmit="handleUserRegister(event)" novalidate>
+          <div class="form-group">
+            <label for="register-name">Full Name <span class="required">*</span></label>
+            <input type="text" id="register-name" placeholder="Anita Sharma" required>
+            <small class="field-hint">Minimum 2 characters.</small>
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email Address <span class="required">*</span></label>
+            <input type="email" id="register-email" placeholder="anita.sharma@example.com" required>
+            <small class="field-hint">Must match valid email pattern (e.g. user@domain.com).</small>
+          </div>
+          <div class="form-group">
+            <label for="register-password">Password <span class="required">*</span></label>
+            <input type="password" id="register-password" placeholder="At least 6 characters" required autocomplete="new-password">
+            <small class="field-hint">Minimum 6 characters length.</small>
+          </div>
+          <div class="form-group">
+            <label for="register-confirm-password">Confirm Password <span class="required">*</span></label>
+            <input type="password" id="register-confirm-password" placeholder="Re-type password" required autocomplete="new-password">
+            <small class="field-hint">Must match password exactly.</small>
+          </div>
+          <div class="alert-box hidden" id="register-msg"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="register-submit">Create Account</button>
+        </form>
+        <div class="modal-footer-text">
+          <span>Already registered? </span>
+          <a href="javascript:void(0)" onclick="switchModal('register-modal', 'login-modal')">Login here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Admin Login Modal (As shown in PDF Page 15 Screenshot 4) -->
+  <div class="modal-overlay hidden" id="admin-modal" onclick="closeModalOnBackdrop(event, 'admin-modal')">
+    <div class="modal-card admin-card">
+      <div class="modal-header">
+        <h3>Covid Testing Management System - Admin</h3>
+        <button class="modal-close" onclick="closeModal('admin-modal')">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="admin-avatar">
+          <img src="assets/icons/shield.svg" alt="Admin" class="avatar-img">
+        </div>
+        <h4 class="admin-welcome">Welcome Back!</h4>
+        <form id="admin-login-form" onsubmit="handleAdminLogin(event)" novalidate>
+          <div class="form-group text-left">
+            <label for="admin-username">Admin Username</label>
+            <input type="text" id="admin-username" placeholder="Enter username (default: admin)" required>
+          </div>
+          <div class="form-group text-left">
+            <label for="admin-password">Admin Password</label>
+            <input type="password" id="admin-password" placeholder="Password (default: admin123)" required>
+          </div>
+          <div class="alert-box hidden" id="admin-msg"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="admin-submit">Admin Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
