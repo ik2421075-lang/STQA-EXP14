@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>STQA Regression Test Report - Experiment 14</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 24px; }
+    .container { max-width: 1200px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); padding: 32px; border: 1px solid #e2e8f0; }
+    h1 { color: #0369a1; margin-top: 0; }
+    .meta-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .metric strong { font-size: 1.5rem; color: #0284c7; display: block; }
+    .metric span { font-size: 0.85rem; color: #64748b; text-transform: uppercase; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
+    th { background: #0369a1; color: #ffffff; text-align: left; padding: 12px; }
+    td { padding: 12px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+    tr:hover { background: #f1f5f9; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    .badge.pass { background: #dcfce7; color: #15803d; }
+    .badge.fail { background: #fee2e2; color: #b91c1c; }
+    .error-msg { background: #fff1f2; border: 1px solid #fca5a5; padding: 8px; border-radius: 6px; margin-top: 6px; font-size: 0.8rem; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>STQA Regression Test Execution Report</h1>
+    <p>Project: <strong>COVID-19 Information & Awareness Portal</strong> | STQA Experiment 14</p>
+    <div class="meta-box">
+      <div class="metric"><strong>38</strong><span>Total Tests</span></div>
+      <div class="metric"><strong>38</strong><span style="color: #16a34a;">Passed</span></div>
+      <div class="metric"><strong>0</strong><span style="color: #dc2626;">Failed / Errors</span></div>
+      <div class="metric"><strong>100.0%</strong><span>Pass Rate</span></div>
+      <div class="metric"><strong>113.40s</strong><span>Total Execution Time</span></div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Test Suite</th>
+          <th>Test Identifier</th>
+          <th>Objective / Details</th>
+          <th>Status</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_01_registration_modal_toggle</code></td>
+          <td>Verify Register button opens modal and close button closes it.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.27s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_02_registration_empty_fields_validation</code></td>
+          <td>Verify form validation rejects submission when required fields are empty.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.10s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_03_registration_invalid_email_regex</code></td>
+          <td>Verify REQ-07: Email regex rejects malformed email addresses.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.51s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_04_registration_short_password_validation</code></td>
+          <td>Verify password requirement enforces minimum 6 characters.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.19s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_05_registration_password_mismatch</code></td>
+          <td>Verify confirmation password must match primary password.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.45s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_06_registration_successful_and_auto_transition</code></td>
+          <td>Verify valid details register successfully and switch to login modal.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>3.62s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_07_registration_duplicate_email_prevention</code></td>
+          <td>Verify REQ-14: Duplicate email registrations are strictly prevented.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.03s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_08_covid_test_registration_valid_submission</code></td>
+          <td>Verify MOD-03: Booking a COVID diagnostic appointment with valid regex fields.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.73s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestRegistration</strong></td>
+          <td><code>test_09_covid_test_registration_invalid_phone_regex</code></td>
+          <td>Verify REQ-08: Phone number regex rejects numbers starting with < 6 or non-10 digits.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.65s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_01_login_modal_toggle</code></td>
+          <td>Verify Login button opens modal and close button dismisses it.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.19s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_02_login_empty_fields_validation</code></td>
+          <td>Verify submitting blank login credentials shows error message.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.00s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_03_login_invalid_email_regex</code></td>
+          <td>Verify email format regex check on login.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.62s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_04_login_unregistered_email</code></td>
+          <td>Verify error message when attempting login with non-existent account.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.76s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_05_login_wrong_password</code></td>
+          <td>Verify rejection of registered email with incorrect password.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.70s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_06_login_successful_and_session_display</code></td>
+          <td>Verify successful login creates session, updates greeting, and displays logout button.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.84s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_07_user_logout_clears_session</code></td>
+          <td>Verify logout destroys session, clears greeting, and restores login/register buttons.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>3.63s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestLogin</strong></td>
+          <td><code>test_08_admin_login_verification</code></td>
+          <td>Verify administrative login modal and authentication check.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.64s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_01_portal_search_matching_query</code></td>
+          <td>Verify portal search returns relevant articles for valid search terms.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.35s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_02_portal_search_symptoms_query</code></td>
+          <td>Verify searching for symptom keyword returns symptoms topic.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>0.90s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_03_portal_search_unknown_query_fallback</code></td>
+          <td>Verify searching for non-existent keyword displays suitable no-results message.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>0.94s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_04_portal_search_clear_button</code></td>
+          <td>Verify clear button appears when typing and clears results when clicked.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.24s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_05_portal_search_trending_quick_tags</code></td>
+          <td>Verify clicking trending keyword button executes search immediately.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.34s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_06_report_search_registered_mobile</code></td>
+          <td>Verify REQ-05: Searching registered mobile displays patient diagnostic report.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.15s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_07_report_search_by_order_id</code></td>
+          <td>Verify searching by Order ID retrieves the corresponding laboratory report.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.98s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestSearch</strong></td>
+          <td><code>test_08_report_search_unregistered_mobile_not_found</code></td>
+          <td>Verify REQ-06: Searching unregistered phone number shows 'Not Found' alert without error.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.96s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_01_comments_locked_when_logged_out</code></td>
+          <td>Verify comment posting is restricted and auth lock notice is shown to guests.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.47s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_02_comments_unlocked_when_logged_in</code></td>
+          <td>Verify logging in displays comment form with active user name badge.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.80s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_03_comment_empty_validation</code></td>
+          <td>Verify submitting empty or whitespace comment is rejected.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.22s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_04_comment_successful_posting</code></td>
+          <td>Verify valid comment is posted, added to feed, and author/timestamp displayed.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.50s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_05_comment_xss_protection_and_escaping</code></td>
+          <td>Verify REQ-12: Script and HTML characters are escaped to prevent XSS injection.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.39s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_06_comment_author_deletion</code></td>
+          <td>Verify author has delete button and can delete their own comment.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.74s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestComments</strong></td>
+          <td><code>test_07_comment_non_author_cannot_delete</code></td>
+          <td>Verify users cannot see delete buttons for comments authored by others.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.89s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestNavigation</strong></td>
+          <td><code>test_01_all_navbar_links_present</code></td>
+          <td>Verify presence and accessibility of all top-level module navigation links.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.18s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestNavigation</strong></td>
+          <td><code>test_02_navbar_navigation_targets</code></td>
+          <td>Verify clicking navigation links properly routes to target sections.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>4.08s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestNavigation</strong></td>
+          <td><code>test_03_hero_cta_buttons</code></td>
+          <td>Verify hero call-to-action buttons are present and functional.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>0.65s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestNavigation</strong></td>
+          <td><code>test_04_mobile_viewport_hamburger_navigation</code></td>
+          <td>Verify responsiveness (REQ-15): Hamburger button appears and toggles nav on mobile (480px).</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>2.07s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestNavigation</strong></td>
+          <td><code>test_05_modal_escape_key_dismissal</code></td>
+          <td>Verify modal closes when user presses the Escape key.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>1.24s</td>
+        </tr>
+        
+        <tr>
+          <td><strong>TestNavigation</strong></td>
+          <td><code>test_06_interactive_symptom_checker</code></td>
+          <td>Verify interactive symptom risk checker evaluates user inputs.</td>
+          <td><span class="badge pass">PASS</span></td>
+          <td>3.15s</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
