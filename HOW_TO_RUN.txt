@@ -1,0 +1,51 @@
+========================================================================
+COVID-19 PORTAL & SELENIUM AUTOMATION LAB - QUICK START GUIDE
+========================================================================
+
+METHOD 1: EASIEST WAY (ONE-CLICK)
+----------------------------------
+Just double-click the file named:
+    RUN_PROJECT.bat
+
+That's it! It will:
+1. Verify Python is installed.
+2. Automatically install Selenium if you don't have it.
+3. Start the server and launch the website in Google Chrome automatically!
+
+
+METHOD 2: USING COMMAND PROMPT (TERMINAL)
+------------------------------------------
+1. Open Command Prompt (cmd) or PowerShell in this folder.
+2. (Optional, if not installed yet) Install Selenium:
+   pip install selenium
+
+3. Start the project:
+   python run_portal.py
+
+4. Google Chrome will automatically open http://localhost:8000!
+
+
+HOW TO RUN THE SELENIUM TESTS:
+------------------------------
+1. In the website that opens in Google Chrome, click "Testing Dashboard"
+   in the left sidebar.
+2. Click any test button, such as:
+   - "Run All Tests"
+   - "Registration Testing"
+   - "Login Testing"
+   - "Navigation Testing"
+   - "Regression Testing"
+3. A separate Google Chrome window will automatically pop up, run the
+   automated browser tests live on your screen, and close when done!
+4. Results, pass percentages, and any defect reports will appear live
+   on the webpage!
+
+
+TROUBLESHOOTING:
+----------------
+- If you see "'python' is not recognized":
+  Install Python from https://www.python.org/downloads/ and make sure to
+  check the box: [x] "Add Python to PATH" during installation.
+- If Chrome does not open automatically, simply open your browser and go to:
+  http://localhost:8000
+========================================================================

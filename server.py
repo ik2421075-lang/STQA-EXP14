@@ -21,10 +21,30 @@ TESTS_DIR = os.path.join(BASE_DIR, "tests")
 if TESTS_DIR not in sys.path:
     sys.path.insert(0, TESTS_DIR)
 
-try:
-    from test_runner_api import execute_suite, RESULTS_DIR, SCREENSHOTS_DIR
-except ImportError:
-    from tests.test_runner_api import execute_suite, RESULTS_DIR, SCREENSHOTS_DIR
+RESULTS_DIR = os.path.join(BASE_DIR, "tests", "results")
+SCREENSHOTS_DIR = os.path.join(BASE_DIR, "tests", "screenshots")
+os.makedirs(RESULTS_DIR, exist_ok=True)
+os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+
+execute_suite = None
+IMPORT_ERROR_DETAILS = ""
+
+def get_test_runner():
+    global execute_suite, IMPORT_ERROR_DETAILS
+    if execute_suite is not None:
+        return execute_suite, ""
+    try:
+        from test_runner_api import execute_suite as runner
+        execute_suite = runner
+        return execute_suite, ""
+    except Exception as e1:
+        try:
+            from tests.test_runner_api import execute_suite as runner
+            execute_suite = runner
+            return execute_suite, ""
+        except Exception as e2:
+            IMPORT_ERROR_DETAILS = str(e2)
+            return None, str(e2)
 
 PORT = 8000
 HOST = "127.0.0.1"
@@ -293,10 +313,21 @@ class PortalRequestHandler(SimpleHTTPRequestHandler):
             # Default headless to False so Chrome opens visibly as requested by user
             headless = payload.get("headless", False)
 
+            runner_fn, runner_err = get_test_runner()
+            if runner_fn is None:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    "status": "error",
+                    "error": f"Test runner not available: {runner_err}. Run 'pip install selenium' to enable testing."
+                }).encode("utf-8"))
+                return
+
             # Start background execution thread
             def _runner():
                 try:
-                    execute_suite(
+                    runner_fn(
                         suite_name=suite_name,
                         headless=headless,
                         on_event=STATE_MANAGER.on_runner_event
@@ -330,11 +361,23 @@ class PortalRequestHandler(SimpleHTTPRequestHandler):
 
         self.send_error(404, "Endpoint not found")
 
+def find_free_port(desired_port=PORT):
+    for p in range(desired_port, desired_port + 20):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind((HOST, p))
+                return p
+            except OSError:
+                continue
+    return desired_port
+
 def start_server(port=PORT):
-    server = ThreadingHTTPServer((HOST, port), PortalRequestHandler)
+    actual_port = find_free_port(port)
+    server = ThreadingHTTPServer((HOST, actual_port), PortalRequestHandler)
+    target_url = f"http://localhost:{actual_port}"
     print("=" * 68)
     print(" COVID-19 INFORMATION PORTAL & INTEGRATED SELENIUM QA LAB")
-    print(f" Web Server Active at: http://localhost:{port}")
+    print(f" Web Server Active at: {target_url}")
     print(" Launching Google Chrome automatically...")
     print(" Press Ctrl+C in terminal to stop.")
     print("=" * 68)
@@ -342,11 +385,15 @@ def start_server(port=PORT):
     # Launch Chrome automatically after short delay
     def _open_browser():
         time.sleep(1.2)
-        target_url = f"http://localhost:{port}"
         try:
-            webbrowser.open(target_url)
-        except Exception as e:
-            print(f"Note: Could not auto-launch browser ({e}). Open {target_url} manually.")
+            opened = webbrowser.open(target_url)
+            if not opened and sys.platform.startswith("win"):
+                os.system(f'start {target_url}')
+        except Exception:
+            if sys.platform.startswith("win"):
+                os.system(f'start {target_url}')
+            else:
+                print(f"Note: Open {target_url} in your browser.")
 
     threading.Thread(target=_open_browser, daemon=True).start()
 
