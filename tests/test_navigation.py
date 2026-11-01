@@ -21,8 +21,8 @@ class TestNavigation(BaseTestCase):
             ("nav-symptoms", "Symptoms"),
             ("nav-prevention", "Prevention"),
             ("nav-vaccine", "Vaccination"),
-            ("nav-test-reg", "Book Test"),
-            ("nav-report-search", "Search Report"),
+            ("nav-test-reg", "Testing"),
+            ("nav-report-search", "Report"),
             ("nav-dashboard", "Dashboard"),
             ("nav-comments", "Community")
         ]

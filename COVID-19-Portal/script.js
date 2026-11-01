@@ -163,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderComments();
   setupSearchInputListener();
   setupMinSlotDate();
+  initQADashboard();
 });
 
 // Setup Mobile Navigation Toggle
@@ -1194,4 +1195,438 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+// ==========================================
+// 12. INTEGRATED SELENIUM QA DASHBOARD CONTROLLER
+// ==========================================
+
+let qaEventSource = null;
+let qaCurrentFilter = 'all';
+let qaPollInterval = null;
+
+function initQADashboard() {
+  setupSSEConnection();
+  loadHistoryList();
+  fetchQASnapshot();
+}
+
+function setupSSEConnection() {
+  if (window.EventSource) {
+    try {
+      if (qaEventSource) {
+        qaEventSource.close();
+      }
+      qaEventSource = new EventSource('/api/test-events');
+
+      qaEventSource.onopen = () => {
+        const pill = document.getElementById('qa-server-status');
+        if (pill) {
+          pill.innerHTML = '<span class="status-dot online"></span> Server Active';
+          pill.className = 'server-status-pill';
+        }
+      };
+
+      qaEventSource.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          handleQAEvent(data);
+        } catch (err) {
+          // heartbeat comment or non-json
+        }
+      };
+
+      qaEventSource.onerror = () => {
+        // Fallback to polling if SSE disconnected
+        startPollingFallback();
+      };
+    } catch (e) {
+      startPollingFallback();
+    }
+  } else {
+    startPollingFallback();
+  }
+}
+
+function startPollingFallback() {
+  if (!qaPollInterval) {
+    qaPollInterval = setInterval(fetchQASnapshot, 1000);
+  }
+}
+
+function stopPollingFallback() {
+  if (qaPollInterval) {
+    clearInterval(qaPollInterval);
+    qaPollInterval = null;
+  }
+}
+
+function fetchQASnapshot() {
+  fetch('/api/test-status')
+    .then(res => res.json())
+    .then(data => {
+      renderFullQASnapshot(data);
+    })
+    .catch(() => {
+      const pill = document.getElementById('qa-server-status');
+      if (pill) {
+        pill.innerHTML = '<span class="status-dot" style="background:#e74a3b;"></span> Disconnected';
+      }
+    });
+}
+
+function handleQAEvent(event) {
+  const type = event.type;
+
+  if (type === 'init') {
+    renderFullQASnapshot(event.snapshot);
+  } else if (type === 'suite_start') {
+    resetQADashboardUI(event.total, event.suite);
+  } else if (type === 'test_start') {
+    const curLabel = document.getElementById('qa-current-test-name');
+    if (curLabel) {
+      curLabel.textContent = `⚡ Executing: ${event.title} (${event.test_id})...`;
+    }
+    upsertTestRow({
+      test_id: event.test_id,
+      method: event.method,
+      suite: event.suite,
+      expected: event.expected,
+      actual: 'Executing Selenium browser actions...',
+      status: 'RUNNING',
+      duration: '...'
+    });
+  } else if (type === 'test_complete') {
+    const rec = event.record;
+    upsertTestRow(rec);
+    if (event.bug) {
+      appendBugCard(event.bug);
+    }
+    updateProgressFromDOM();
+  } else if (type === 'suite_complete') {
+    const summary = event.summary;
+    renderFullQASnapshot(summary);
+    const statusPill = document.getElementById('qa-runner-status');
+    if (statusPill) {
+      statusPill.textContent = 'STATUS: COMPLETED';
+      statusPill.className = 'badge badge-success py-2 px-3 mr-2';
+    }
+    const curLabel = document.getElementById('qa-current-test-name');
+    if (curLabel) {
+      curLabel.textContent = `Completed ${summary.total} tests in ${summary.duration} (Pass Rate: ${summary.pass_rate}%)`;
+    }
+    loadHistoryList();
+  }
+}
+
+function resetQADashboardUI(total, suiteName) {
+  const statusPill = document.getElementById('qa-runner-status');
+  if (statusPill) {
+    statusPill.textContent = `RUNNING: ${suiteName.toUpperCase()}`;
+    statusPill.className = 'badge badge-warning py-2 px-3 mr-2';
+  }
+
+  const progressBar = document.getElementById('qa-progress-bar');
+  if (progressBar) {
+    progressBar.style.width = '0%';
+    progressBar.textContent = '0%';
+    progressBar.className = 'progress-bar progress-bar-striped progress-bar-animated bg-primary';
+  }
+
+  const progressText = document.getElementById('qa-progress-text');
+  if (progressText) {
+    progressText.textContent = `0 / ${total} Completed (0%)`;
+  }
+
+  document.getElementById('qa-metric-total').textContent = total;
+  document.getElementById('qa-metric-passed').textContent = '0';
+  document.getElementById('qa-metric-failed').textContent = '0';
+  document.getElementById('qa-metric-skipped').textContent = '0';
+  document.getElementById('qa-metric-rate').textContent = '0.0%';
+  document.getElementById('qa-metric-duration').textContent = '0.00s';
+
+  const tbody = document.getElementById('qa-results-body');
+  if (tbody) tbody.innerHTML = '';
+
+  const bugsSection = document.getElementById('qa-bugs-section');
+  const bugsList = document.getElementById('qa-bugs-list');
+  if (bugsSection) bugsSection.classList.add('hidden');
+  if (bugsList) bugsList.innerHTML = '';
+}
+
+function updateProgressFromDOM() {
+  const rows = document.querySelectorAll('#qa-results-body tr[data-status]');
+  const totalEl = document.getElementById('qa-metric-total');
+  const total = parseInt(totalEl?.textContent || '0', 10);
+  
+  let passed = 0;
+  let failed = 0;
+  let skipped = 0;
+
+  rows.forEach(r => {
+    const st = r.getAttribute('data-status');
+    if (st === 'PASS') passed++;
+    else if (st === 'FAIL' || st === 'ERROR') failed++;
+    else if (st === 'SKIPPED') skipped++;
+  });
+
+  const completed = passed + failed + skipped;
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const passRate = completed > 0 ? ((passed / completed) * 100).toFixed(1) : '0.0';
+
+  const progressBar = document.getElementById('qa-progress-bar');
+  if (progressBar) {
+    progressBar.style.width = `${pct}%`;
+    progressBar.textContent = `${pct}%`;
+  }
+
+  const progressText = document.getElementById('qa-progress-text');
+  if (progressText) {
+    progressText.textContent = `${completed} / ${total} Completed (${pct}%)`;
+  }
+
+  document.getElementById('qa-metric-passed').textContent = passed;
+  document.getElementById('qa-metric-failed').textContent = failed;
+  document.getElementById('qa-metric-skipped').textContent = skipped;
+  document.getElementById('qa-metric-rate').textContent = `${passRate}%`;
+}
+
+function renderFullQASnapshot(data) {
+  if (!data) return;
+
+  const total = data.total || 0;
+  const passed = data.passed || 0;
+  const failed = data.failed || 0;
+  const skipped = data.skipped || 0;
+  const passRate = data.pass_rate || 0.0;
+  const duration = data.duration || '0.00s';
+
+  document.getElementById('qa-metric-total').textContent = total;
+  document.getElementById('qa-metric-passed').textContent = passed;
+  document.getElementById('qa-metric-failed').textContent = failed;
+  document.getElementById('qa-metric-skipped').textContent = skipped;
+  document.getElementById('qa-metric-rate').textContent = `${passRate}%`;
+  document.getElementById('qa-metric-duration').textContent = duration;
+
+  const statusPill = document.getElementById('qa-runner-status');
+  if (statusPill) {
+    if (data.is_running) {
+      statusPill.textContent = `RUNNING: ${data.suite_name ? data.suite_name.toUpperCase() : 'SUITE'}`;
+      statusPill.className = 'badge badge-warning py-2 px-3 mr-2';
+    } else {
+      statusPill.textContent = 'STATUS: IDLE';
+      statusPill.className = 'badge badge-info py-2 px-3 mr-2';
+    }
+  }
+
+  const curLabel = document.getElementById('qa-current-test-name');
+  if (curLabel && data.current_test) {
+    curLabel.textContent = data.current_test;
+  }
+
+  const completed = passed + failed + skipped;
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const progressBar = document.getElementById('qa-progress-bar');
+  if (progressBar) {
+    progressBar.style.width = `${pct}%`;
+    progressBar.textContent = `${pct}%`;
+  }
+
+  const progressText = document.getElementById('qa-progress-text');
+  if (progressText) {
+    progressText.textContent = `${completed} / ${total} Completed (${pct}%)`;
+  }
+
+  // Render Records
+  const tbody = document.getElementById('qa-results-body');
+  if (tbody && data.records && data.records.length > 0) {
+    tbody.innerHTML = '';
+    data.records.forEach(rec => upsertTestRow(rec));
+  }
+
+  // Render Bugs
+  const bugsSection = document.getElementById('qa-bugs-section');
+  const bugsList = document.getElementById('qa-bugs-list');
+  const bugCountSpan = document.getElementById('qa-bug-count');
+
+  if (bugsSection && bugsList) {
+    if (data.bugs && data.bugs.length > 0) {
+      bugsSection.classList.remove('hidden');
+      if (bugCountSpan) bugCountSpan.textContent = data.bugs.length;
+      bugsList.innerHTML = '';
+      data.bugs.forEach(b => appendBugCard(b));
+    } else {
+      bugsSection.classList.add('hidden');
+      bugsList.innerHTML = '';
+      if (bugCountSpan) bugCountSpan.textContent = '0';
+    }
+  }
+}
+
+function upsertTestRow(rec) {
+  const tbody = document.getElementById('qa-results-body');
+  if (!tbody) return;
+
+  const rowId = `qa-row-${rec.test_id}`;
+  let row = document.getElementById(rowId);
+
+  const statusClass = rec.status === 'PASS' ? 'badge-success' :
+                      rec.status === 'FAIL' || rec.status === 'ERROR' ? 'badge-danger' :
+                      rec.status === 'RUNNING' ? 'badge-warning' : 'badge-secondary';
+
+  const innerHtml = `
+    <td><strong>${escapeHtml(rec.test_id)}</strong></td>
+    <td>
+      <strong>${escapeHtml(rec.title || rec.method)}</strong>
+      <small class="d-block text-muted font-monospace">${escapeHtml(rec.suite || '')} &bull; ${escapeHtml(rec.method || '')}</small>
+    </td>
+    <td><small>${escapeHtml(rec.expected || '')}</small></td>
+    <td><small class="${rec.status === 'FAIL' ? 'text-danger font-weight-bold' : ''}">${escapeHtml(rec.actual || '')}</small></td>
+    <td><span class="badge ${statusClass}">${escapeHtml(rec.status)}</span></td>
+    <td><small>${escapeHtml(rec.duration || '')}</small></td>
+  `;
+
+  if (!row) {
+    row = document.createElement('tr');
+    row.id = rowId;
+    tbody.appendChild(row);
+  }
+
+  row.setAttribute('data-status', rec.status);
+  row.innerHTML = innerHtml;
+
+  // Apply current filter visibility
+  if (qaCurrentFilter !== 'all' && rec.status !== qaCurrentFilter) {
+    row.style.display = 'none';
+  } else {
+    row.style.display = '';
+  }
+}
+
+function appendBugCard(bug) {
+  const bugsList = document.getElementById('qa-bugs-list');
+  const bugsSection = document.getElementById('qa-bugs-section');
+  if (!bugsList) return;
+
+  if (bugsSection) bugsSection.classList.remove('hidden');
+
+  const card = document.createElement('div');
+  card.className = 'qa-bug-card';
+  card.innerHTML = `
+    <div class="qa-bug-header">
+      <span class="qa-bug-title">${escapeHtml(bug.bug_id)}: ${escapeHtml(bug.method)} (${escapeHtml(bug.test_id)})</span>
+      <div>
+        <span class="badge badge-danger mr-1">${escapeHtml(bug.severity || 'S2 Major')}</span>
+        <span class="badge badge-warning">${escapeHtml(bug.priority || 'P2 High')}</span>
+      </div>
+    </div>
+    <div class="qa-bug-details">
+      <p class="mb-1"><strong>Feature Affected:</strong> ${escapeHtml(bug.feature || 'Application Core')}</p>
+      <p class="mb-1"><strong>Expected:</strong> ${escapeHtml(bug.expected || '')}</p>
+      <p class="mb-1 text-danger"><strong>Actual Behavior:</strong> ${escapeHtml(bug.actual || '')}</p>
+      ${bug.screenshot ? `<p class="mb-1"><a href="${escapeHtml(bug.screenshot)}" target="_blank" class="btn btn-outline-danger btn-sm">View Failure Screenshot</a></p>` : ''}
+      <div class="qa-bug-trace">${escapeHtml(bug.error_details || '')}</div>
+    </div>
+  `;
+  bugsList.appendChild(card);
+}
+
+function filterResultsTable(filter) {
+  qaCurrentFilter = filter;
+  const rows = document.querySelectorAll('#qa-results-body tr[data-status]');
+  rows.forEach(r => {
+    const st = r.getAttribute('data-status');
+    if (filter === 'all' || st === filter) {
+      r.style.display = '';
+    } else {
+      r.style.display = 'none';
+    }
+  });
+
+  // Update active button state
+  document.querySelectorAll('.qa-table-filters button').forEach(b => {
+    b.classList.remove('active');
+  });
+  const activeBtn = event?.target;
+  if (activeBtn) activeBtn.classList.add('active');
+}
+
+function triggerTestRun(suiteName) {
+  const headlessChk = document.getElementById('headless-toggle-chk');
+  const isHeadless = headlessChk ? headlessChk.checked : false;
+
+  const targetSection = document.getElementById('qa-testing-dashboard');
+  if (targetSection) {
+    targetSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const curLabel = document.getElementById('qa-current-test-name');
+  if (curLabel) {
+    curLabel.textContent = `Connecting to Selenium WebDriver (${isHeadless ? 'Headless' : 'Visible Chrome'})...`;
+  }
+
+  fetch('/api/run-tests', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      suite: suiteName,
+      headless: isHeadless
+    })
+  })
+  .then(res => {
+    if (res.status === 409) {
+      alert('A test suite is already executing. Please wait for completion.');
+      return null;
+    }
+    return res.json();
+  })
+  .then(data => {
+    if (data && data.status === 'started') {
+      const statusPill = document.getElementById('qa-runner-status');
+      if (statusPill) {
+        statusPill.textContent = `RUNNING: ${suiteName.toUpperCase()}`;
+        statusPill.className = 'badge badge-warning py-2 px-3 mr-2';
+      }
+    }
+  })
+  .catch(err => {
+    console.error('Failed to trigger test suite:', err);
+    alert('Failed to connect to local server test runner. Ensure server.py is running on http://localhost:8000.');
+  });
+}
+
+function loadHistoryList() {
+  const select = document.getElementById('qa-history-select');
+  if (!select) return;
+
+  fetch('/api/history')
+    .then(res => res.json())
+    .then(files => {
+      select.innerHTML = '<option value="">Select a previous test run...</option>';
+      files.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.filename;
+        opt.textContent = `${f.run_id} - Suite: ${f.suite_name.toUpperCase()} (${f.passed}/${f.total} Passed - ${f.pass_rate}%)`;
+        select.appendChild(opt);
+      });
+    })
+    .catch(() => {});
+}
+
+function loadSelectedHistory() {
+  const select = document.getElementById('qa-history-select');
+  if (!select || !select.value) return;
+
+  fetch(`/api/history?file=${encodeURIComponent(select.value)}`)
+    .then(res => res.json())
+    .then(data => {
+      renderFullQASnapshot(data);
+      const curLabel = document.getElementById('qa-current-test-name');
+      if (curLabel) {
+        curLabel.textContent = `Loaded report ${data.run_id} (${data.start_time})`;
+      }
+    })
+    .catch(err => {
+      alert('Failed to load selected history report.');
+    });
 }
