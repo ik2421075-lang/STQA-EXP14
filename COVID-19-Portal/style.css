@@ -49,6 +49,27 @@ body {
 }
 
 /* ==========================================================================
+   MULTI-PAGE VIEWS & ROUTING ANIMATIONS
+   ========================================================================== */
+.page-section {
+  display: block;
+  min-height: calc(100vh - 170px);
+  padding: 1.25rem 0 2rem;
+  animation: pageFadeIn 0.22s ease-in-out;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0.35;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
    1. SIDEBAR (COVID19-TMS - Reference Screenshot 1, 2, 3)
    ========================================================================== */
 .sidebar {

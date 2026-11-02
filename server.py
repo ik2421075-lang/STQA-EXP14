@@ -111,25 +111,41 @@ class TestStateManager:
                 self.pass_rate = 0.0
                 self.current_test = "Initializing Chrome Browser..."
 
+                # Print to terminal
+                print("\n" + "=" * 70, flush=True)
+                print(f" [TEST RUNNER] Starting Suite: {self.suite_name.upper()} ({self.total} Test Cases)", flush=True)
+                print("=" * 70, flush=True)
+
             elif etype == "test_start":
-                self.current_test = f"{event.get('title', '')} ({event.get('test_id', '')})"
+                test_id = event.get('test_id', '')
+                title = event.get('title', '')
+                self.current_test = f"{title} ({test_id})"
+                print(f" >> [RUNNING / TESTING] {test_id} - {title}...", flush=True)
 
             elif etype == "test_complete":
                 rec = event.get("record", {})
+                test_id = rec.get("test_id", "")
+                title = rec.get("title", "")
+                status = rec.get("status", "")
+                duration = rec.get("duration", "")
                 self.completed += 1
-                if rec.get("status") == "PASS":
+                if status == "PASS":
                     self.passed += 1
-                elif rec.get("status") in ("FAIL", "ERROR"):
+                    print(f"    --> [PASS] {test_id} - {title} ({duration})", flush=True)
+                elif status in ("FAIL", "ERROR"):
                     self.failed += 1
-                elif rec.get("status") == "SKIPPED":
+                    err_summary = rec.get('error', '').splitlines()[-1] if rec.get('error') else 'Assertion Failed'
+                    print(f"    --> [FAIL] {test_id} - {title} ({duration}) | Reason: {err_summary}", flush=True)
+                elif status == "SKIPPED":
                     self.skipped += 1
+                    print(f"    --> [SKIPPED] {test_id} - {title} ({duration})", flush=True)
 
                 self.records.append(rec)
                 if event.get("bug"):
                     self.bugs.append(event["bug"])
 
                 self.pass_rate = round((self.passed / self.completed * 100), 1) if self.completed > 0 else 0.0
-                self.current_test = f"Finished {rec.get('title', '')}"
+                self.current_test = f"Finished {title}"
 
             elif etype == "suite_complete":
                 summary = event.get("summary", {})
@@ -142,6 +158,11 @@ class TestStateManager:
                 self.skipped = summary.get("skipped", self.skipped)
                 self.pass_rate = summary.get("pass_rate", self.pass_rate)
                 self.current_test = "Suite Execution Complete."
+
+                # Print to terminal
+                print("=" * 70, flush=True)
+                print(f" [SUITE COMPLETE] {self.passed}/{self.total} Tests Passed ({self.pass_rate}%) in {self.duration}", flush=True)
+                print("=" * 70 + "\n", flush=True)
 
         # Broadcast event to frontend SSE subscribers
         self.broadcast(event)
@@ -374,10 +395,10 @@ def find_free_port(desired_port=PORT):
 def start_server(port=PORT):
     actual_port = find_free_port(port)
     server = ThreadingHTTPServer((HOST, actual_port), PortalRequestHandler)
-    target_url = f"http://localhost:{actual_port}"
+    target_url = f"http://localhost:{actual_port}/#test-registration"
     print("=" * 68)
     print(" COVID-19 INFORMATION PORTAL & INTEGRATED SELENIUM QA LAB")
-    print(f" Web Server Active at: {target_url}")
+    print(f" Web Server Active at: http://localhost:{actual_port}")
     print(" Launching Google Chrome automatically...")
     print(" Press Ctrl+C in terminal to stop.")
     print("=" * 68)
