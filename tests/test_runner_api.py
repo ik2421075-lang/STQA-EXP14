@@ -227,11 +227,11 @@ def build_test_suite(suite_name="all"):
 
     return suite
 
-def execute_suite(suite_name="all", headless=False, on_event=None):
+def execute_suite(suite_name="all", headless=True, on_event=None):
     """
     Executes the specified test suite.
-    - headless=False: Opens Google Chrome visibly as requested!
-    - headless=True: Headless Chrome
+    - headless=True: Headless Chrome (no popup windows, silent background execution)
+    - headless=False: Visible Chrome
     """
     os.environ["HEADLESS"] = "true" if headless else "false"
 

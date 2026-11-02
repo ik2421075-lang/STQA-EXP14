@@ -168,6 +168,22 @@ body {
   stroke: currentColor;
 }
 
+.quick-tag {
+  background: #eaecf4;
+  border: 1px solid #d1d3e2;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 0.7rem;
+  color: #4e73df;
+  cursor: pointer;
+  margin-right: 4px;
+  line-height: 1.2;
+}
+.quick-tag:hover {
+  background: #4e73df;
+  color: #fff;
+}
+
 .qa-highlight {
   background: rgba(255, 255, 255, 0.18);
   border-left: 3px solid #f6c23e !important;

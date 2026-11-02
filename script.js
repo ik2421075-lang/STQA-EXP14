@@ -8,7 +8,8 @@
 // ==========================================
 // 0. RUNTIME ENVIRONMENT & AUTOMATION DETECTION
 // ==========================================
-window.__SELENIUM_MODE__ = !!(navigator.webdriver || window.navigator.webdriver);
+const urlParams = new URLSearchParams(window.location.search);
+window.__SELENIUM_MODE__ = urlParams.has('test');
 
 // Valid Multi-Page View Targets
 const VALID_PAGES = [
@@ -223,20 +224,20 @@ function autoLoginAndFillPatient() {
   const testTypeSelect = document.getElementById('test-type');
   const slotInput = document.getElementById('patient-slot');
 
-  if (nameInput && !nameInput.value) nameInput.value = DEFAULT_PATIENT.name;
-  if (phoneInput && !phoneInput.value) phoneInput.value = DEFAULT_PATIENT.phone;
-  if (dobInput && !dobInput.value) dobInput.value = DEFAULT_PATIENT.dob;
-  if (govtTypeSelect && !govtTypeSelect.value) {
+  if (nameInput) nameInput.value = DEFAULT_PATIENT.name;
+  if (phoneInput) phoneInput.value = DEFAULT_PATIENT.phone;
+  if (dobInput) dobInput.value = DEFAULT_PATIENT.dob;
+  if (govtTypeSelect) {
     govtTypeSelect.value = DEFAULT_PATIENT.govtIdType;
     if (typeof updateGovtIdPlaceholder === 'function') updateGovtIdPlaceholder();
   }
-  if (govtNumInput && !govtNumInput.value) govtNumInput.value = DEFAULT_PATIENT.govtIdNum;
-  if (stateSelect && !stateSelect.value) stateSelect.value = DEFAULT_PATIENT.state;
-  if (addressInput && !addressInput.value) addressInput.value = DEFAULT_PATIENT.address;
-  if (testTypeSelect && !testTypeSelect.value) testTypeSelect.value = DEFAULT_PATIENT.testType;
+  if (govtNumInput) govtNumInput.value = DEFAULT_PATIENT.govtIdNum;
+  if (stateSelect) stateSelect.value = DEFAULT_PATIENT.state;
+  if (addressInput) addressInput.value = DEFAULT_PATIENT.address;
+  if (testTypeSelect) testTypeSelect.value = DEFAULT_PATIENT.testType;
 
   // Set appointment slot to tomorrow at 10:30 AM
-  if (slotInput && !slotInput.value) {
+  if (slotInput) {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const yyyy = tomorrow.getFullYear();
@@ -1147,6 +1148,10 @@ function quickSearch(keyword) {
   }
 }
 
+function executeQuickSearch(keyword) {
+  quickSearch(keyword);
+}
+
 function performPortalSearch() {
   const searchInput = document.getElementById('search-input');
   const resultsContainer = document.getElementById('search-results');
@@ -1409,6 +1414,11 @@ function fetchQASnapshot() {
   fetch('/api/test-status')
     .then(res => res.json())
     .then(data => {
+      const pill = document.getElementById('qa-server-status');
+      if (pill) {
+        pill.innerHTML = '<span class="status-dot online"></span> Server Active';
+        pill.className = 'server-status-pill';
+      }
       renderFullQASnapshot(data);
     })
     .catch(() => {
@@ -1697,16 +1707,13 @@ function filterResultsTable(filter) {
 
 function triggerTestRun(suiteName) {
   const headlessChk = document.getElementById('headless-toggle-chk');
-  const isHeadless = headlessChk ? headlessChk.checked : false;
+  const isHeadless = headlessChk ? headlessChk.checked : true;
 
-  const targetSection = document.getElementById('qa-testing-dashboard');
-  if (targetSection) {
-    targetSection.scrollIntoView({ behavior: 'smooth' });
-  }
+  switchPage('qa-testing-dashboard');
 
   const curLabel = document.getElementById('qa-current-test-name');
   if (curLabel) {
-    curLabel.textContent = `Connecting to Selenium WebDriver (${isHeadless ? 'Headless' : 'Visible Chrome'})...`;
+    curLabel.textContent = `Connecting to Selenium WebDriver (${isHeadless ? 'Headless Background' : 'Visible Chrome'})...`;
   }
 
   fetch('/api/run-tests', {

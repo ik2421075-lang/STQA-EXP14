@@ -154,6 +154,14 @@
                 </button>
               </div>
             </div>
+            <!-- Trending Quick Tags (REQ-05 / TC-SRC-05) -->
+            <div class="quick-tags-wrap mt-1 d-flex align-items-center" style="font-size: 0.72rem;">
+              <span class="text-muted mr-1" style="font-size: 0.7rem;">Tags:</span>
+              <button type="button" class="btn btn-xs quick-tag" onclick="executeQuickSearch('Symptoms')">Symptoms</button>
+              <button type="button" class="btn btn-xs quick-tag" onclick="executeQuickSearch('Vaccine')">Vaccine</button>
+              <button type="button" class="btn btn-xs quick-tag" onclick="executeQuickSearch('RT-PCR')">RT-PCR</button>
+              <button type="button" class="btn btn-xs quick-tag" onclick="executeQuickSearch('Mask')">Mask</button>
+            </div>
           </div>
 
           <!-- Topbar Center / Helpline Indicator -->
@@ -168,7 +176,7 @@
           <ul class="navbar-nav ml-auto" id="main-nav">
             <!-- Testing Lab Quick Action Button -->
             <li class="nav-item d-none d-sm-block">
-              <a href="#qa-testing-dashboard" class="btn btn-qa-quick">
+              <a href="#qa-testing-dashboard" class="btn btn-qa-quick" id="btn-topbar-qa" onclick="switchPage('qa-testing-dashboard'); return false;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 QA Test Lab
               </a>
@@ -461,7 +469,7 @@
                   <!-- Browser Options -->
                   <div class="qa-options-wrap">
                     <label class="custom-control-label font-weight-bold" style="cursor: pointer;">
-                      <input type="checkbox" id="headless-toggle-chk">
+                      <input type="checkbox" id="headless-toggle-chk" checked>
                       Run in Background (Headless)
                     </label>
                     <small class="text-muted d-block">(Uncheck to watch Chrome launch visibly and perform tests)</small>

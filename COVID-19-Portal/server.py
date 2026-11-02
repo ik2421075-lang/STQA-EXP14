@@ -331,8 +331,8 @@ class PortalRequestHandler(SimpleHTTPRequestHandler):
                 payload = {}
 
             suite_name = payload.get("suite", "all")
-            # Default headless to False so Chrome opens visibly as requested by user
-            headless = payload.get("headless", False)
+            # Default headless to True so tests execute silently in background without intrusive popup windows
+            headless = payload.get("headless", True)
 
             runner_fn, runner_err = get_test_runner()
             if runner_fn is None:
@@ -400,6 +400,7 @@ def start_server(port=PORT):
     print(" COVID-19 INFORMATION PORTAL & INTEGRATED SELENIUM QA LAB")
     print(f" Web Server Active at: http://localhost:{actual_port}")
     print(" Launching Google Chrome automatically...")
+    print(" Auto-initiating Selenium QA Testing Lab (Headless)...")
     print(" Press Ctrl+C in terminal to stop.")
     print("=" * 68)
 
@@ -417,6 +418,22 @@ def start_server(port=PORT):
                 print(f"Note: Open {target_url} in your browser.")
 
     threading.Thread(target=_open_browser, daemon=True).start()
+
+    # Automatically run the QA Test Lab on startup without popping up extra windows
+    def _auto_start_qa():
+        time.sleep(2.8)
+        try:
+            runner_fn, _ = get_test_runner()
+            if runner_fn and not STATE_MANAGER.is_running:
+                runner_fn(
+                    suite_name="all",
+                    headless=True,
+                    on_event=STATE_MANAGER.on_runner_event
+                )
+        except Exception as e:
+            print(f"Auto-QA note: {e}")
+
+    threading.Thread(target=_auto_start_qa, daemon=True).start()
 
     try:
         server.serve_forever()
